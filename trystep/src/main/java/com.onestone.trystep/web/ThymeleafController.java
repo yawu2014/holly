@@ -12,7 +12,7 @@ import java.util.Map;
  */
 @Controller
 public class ThymeleafController {
-    @RequestMapping("helloHtml")
+    @RequestMapping("   ")
     public String helloThymeleaf(Map<String,Object> map){
         map.put("hello","from "+getClass().getSimpleName()+" helloHtml");
         return "/helloHtml";

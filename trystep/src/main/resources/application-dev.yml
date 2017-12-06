@@ -3,6 +3,7 @@ spring:
     readDB: jdbc:mysql://node:3306/data_anhui?useUnicode=true&characterEncoding=utf8
     username: root
     password: m122
+    type: com.alibaba.druid.pool.DruidDataSource
   thymeleaf:
     prefix: classpath:/templetes/
     suffix: .html
