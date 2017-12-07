@@ -16,6 +16,7 @@ import java.util.List;
  */
 @Service
 public class UserServiceImpl implements UserService {
+    @Autowired
     private UserDao userDao;
     public boolean insert(User u) {
         DruidDataSource dataSource;

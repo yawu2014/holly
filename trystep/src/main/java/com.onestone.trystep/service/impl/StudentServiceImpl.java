@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class StudentServiceImpl implements StudentService {
+    @Autowired
     private StudentDao studentDao;
     public boolean insert(Student student) {
         return studentDao.insert(student)>0?true:false;
