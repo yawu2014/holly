@@ -88,8 +88,8 @@ public class MyBatisConfiguration {
     public SqlSessionFactoryBean getSessionFactory(){
         SqlSessionFactoryBean ssfb = new SqlSessionFactoryBean();
         ssfb.setDataSource(getDataSource());
-        Resource rs = new ClassPathResource("classpath:mappers/*");
-        System.out.println("filepath:"+rs.getFilename());
+        Resource rs = new ClassPathResource("mappers/");
+      //  System.out.println("filepath:"+rs.getURI().getPath().toString());
         ssfb.setMapperLocations(new Resource[]{rs});
         return ssfb;
     }
