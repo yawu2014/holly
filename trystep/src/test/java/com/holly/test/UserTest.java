@@ -12,7 +12,7 @@ public class UserTest extends ApplicationTestBase {
     public void testUser(){
         User u = new User();
         u.setAge(23);
-        u.setUserId(11);
+        u.setUserId(12);
         u.setName("hello");
         userService.insert(u);
     }

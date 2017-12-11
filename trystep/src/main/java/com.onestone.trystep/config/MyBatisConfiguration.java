@@ -12,8 +12,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import javax.sql.DataSource;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,13 +40,13 @@ public class MyBatisConfiguration {
         userTableRule.setLogicTable("t_user");
         userTableRule.setActualDataNodes("ds_${0..1}.t_user_${[0,1,2]}");
         userTableRule.setDatabaseShardingStrategyConfig(new InlineShardingStrategyConfiguration("user_id", "ds_${user_id % 2}"));
-        userTableRule.setTableShardingStrategyConfig(new InlineShardingStrategyConfiguration("user_id", "ds_${user_id % 2}"));
+        userTableRule.setTableShardingStrategyConfig(new InlineShardingStrategyConfiguration("age", "t_user_${age % 3}"));
 
         TableRuleConfiguration studentTableRule = new TableRuleConfiguration();
         studentTableRule.setLogicTable("t_student");
         studentTableRule.setActualDataNodes("ds_${0..1}.t_student_${[0,1]}");
-        studentTableRule.setDatabaseShardingStrategyConfig(new InlineShardingStrategyConfiguration("user_id", "ds_${user_id % 2}"));;
-        studentTableRule.setTableShardingStrategyConfig(new InlineShardingStrategyConfiguration("user_id", "ds_${user_id % 2}"));
+        studentTableRule.setDatabaseShardingStrategyConfig(new InlineShardingStrategyConfiguration("user_id", "ds_${student_id % 2}"));;
+        studentTableRule.setTableShardingStrategyConfig(new InlineShardingStrategyConfiguration("age", "t_student_${age % 2}"));
 
         ShardingRuleConfiguration shardingRuleConfiguration = new ShardingRuleConfiguration();
         shardingRuleConfiguration.getTableRuleConfigs().add(userTableRule);
@@ -85,12 +87,14 @@ public class MyBatisConfiguration {
         return druidDataSource;
     }
     @Bean("sessionFactory")
-    public SqlSessionFactoryBean getSessionFactory(){
+    public SqlSessionFactoryBean getSessionFactory() throws Exception{
         SqlSessionFactoryBean ssfb = new SqlSessionFactoryBean();
         ssfb.setDataSource(getDataSource());
-        Resource rs = new ClassPathResource("classpath:mappers/*");
-        System.out.println("filepath:"+rs.getFilename());
-        ssfb.setMapperLocations(new Resource[]{rs});
+        ssfb.setTypeAliasesPackage("com.onestone.trystep.dao");
+        ssfb.setConfigLocation(new ClassPathResource("mybatis-config.xml"));
+        PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+        Resource[] resources = resolver.getResources("classpath:/mappers/*.xml");
+        ssfb.setMapperLocations(resources);
         return ssfb;
     }
     @Bean
