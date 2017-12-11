@@ -95,6 +95,7 @@ public class MyBatisConfiguration {
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         Resource[] resources = resolver.getResources("classpath:/mappers/*.xml");
         ssfb.setMapperLocations(resources);
+
         return ssfb;
     }
     @Bean
