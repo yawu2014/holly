@@ -42,6 +42,7 @@ public class BoundedQueue<T> {
             }
             --count;
             notFull.signal();
+            return (T)x;
         }finally {
             lock.unlock();
         }
