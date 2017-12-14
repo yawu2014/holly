@@ -1,4 +1,4 @@
-package com.holly.test.spring;
+package com.holly.test.spring.bean;
 
 /**
  * @Author liuyj
