@@ -3,7 +3,9 @@ package com.holly.test.spring.bean;
 /**
  * @Author liuyj
  * @Description:
- * @date 2017/12/13 13:47
+ * @date 2017/12/20 17:08
  */
-public class Bean {
+
+public interface ProxyTestInterface {
+    void add();
 }

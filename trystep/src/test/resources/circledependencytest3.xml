@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="cda" class="com.holly.test.spring.bean.CircleDependencyA" scope="prototype">
+        <property name="cdb" ref="cdb"/>
+    </bean>
+    <bean id="cdb" class="com.holly.test.spring.bean.CircleDependencyB" scope="prototype">
+        <property name="cdc" ref="cdc"/>
+    </bean>
+    <bean id="cdc" class="com.holly.test.spring.bean.CircleDependencyC" scope="prototype">
+        <property name="cda" ref="cda"/>
+    </bean>
+</beans>
