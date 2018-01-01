@@ -101,7 +101,7 @@ public class SpringTest {
         treeBeanB.setRight(treeBeanF);
         treeBeanA.setLeft(treeBeanB);
         treeBeanA.setRight(treeBeanC);
-        orderVisitByStack(treeBeanA);
+        orderVisit(treeBeanA);
     }
 
     /**
@@ -110,27 +110,28 @@ public class SpringTest {
      */
     private void orderVisit(TreeBean bean){
         if(bean != null){
-//            System.out.println(bean.getData()+":");//此处所在顺序就是访问循序,前序
+//            System.out.print(bean.getData()+":");//此处所在顺序就是访问循序,前序
             orderVisit(bean.getLeft());
-//            System.out.println(bean.getData()+":");//此处所在顺序就是访问循序,中序
+            System.out.print(bean.getData()+":");//此处所在顺序就是访问循序,中序
             orderVisit(bean.getRight());
-            System.out.println(bean.getData()+":");//此处所在顺序就是访问循序,后序
+//            System.out.print(bean.getData()+":");//此处所在顺序就是访问循序,后序
         }
     }
     private void orderVisitByStack(TreeBean bean){
         Stack<TreeBean> stack = new Stack<TreeBean>();
         TreeBean visitBean = bean;
-        Set<TreeBean> set = new HashSet<TreeBean>();
+
         if(visitBean == null){
             System.out.println("bean is null");
         }else{
-            while(visitBean != null && set.add(visitBean)){
+            while(visitBean != null || stack.size()>0){
                 while(visitBean != null){
-                    System.out.print(visitBean.getData()+"-");
-                    stack.push(visitBean);
+//                    System.out.println(visitBean.getData());//中序遍历
+                    stack.push(visitBean);//左子树不为空则push
                     visitBean = visitBean.getLeft();
                 }
                 visitBean = stack.pop();
+//                System.out.print(visitBean.getData()+"-");//前序遍历
                 visitBean = visitBean.getRight();
             }
         }
