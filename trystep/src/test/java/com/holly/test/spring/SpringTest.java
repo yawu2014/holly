@@ -1,6 +1,7 @@
 package com.holly.test.spring;
 
 import com.holly.test.spring.bean.*;
+import org.assertj.core.util.Lists;
 import org.junit.Test;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
@@ -10,8 +11,11 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.transaction.interceptor.BeanFactoryTransactionAttributeSourceAdvisor;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.Stack;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * @Author liuyj
@@ -95,45 +99,117 @@ public class SpringTest {
         TreeBean treeBeanE = new TreeBean("E");
         TreeBean treeBeanF = new TreeBean("F");
         TreeBean treeBeanG = new TreeBean("G");
+        TreeBean treeBeanH = new TreeBean("H");
+        treeBeanE.setLeft(treeBeanH);
         treeBeanD.setRight(treeBeanE);
         treeBeanF.setLeft(treeBeanG);
         treeBeanB.setLeft(treeBeanD);
         treeBeanB.setRight(treeBeanF);
         treeBeanA.setLeft(treeBeanB);
         treeBeanA.setRight(treeBeanC);
-        orderVisit(treeBeanA);
+        String[] result = new String[]{"","",""};
+        orderVisit(treeBeanA ,result);
+        for(String str:result) {
+            System.out.println(str);
+        }
+        System.out.println("----by stack");
+        String[] resultStack = new String[]{"","",""};
+        orderVisitByStackSuffix(treeBeanA,resultStack);
+        for(String str:resultStack){
+            System.out.println(str);
+        }
+        orderInQue(treeBeanA);
     }
 
     /**
      * 递归遍历
      * @param bean
+     * @param str [0]先序遍历 [1]中序遍历 [2]后序遍历
      */
-    private void orderVisit(TreeBean bean){
+    private void orderVisit(TreeBean bean,String[] str){
         if(bean != null){
-//            System.out.print(bean.getData()+":");//此处所在顺序就是访问循序,前序
-            orderVisit(bean.getLeft());
-            System.out.print(bean.getData()+":");//此处所在顺序就是访问循序,中序
-            orderVisit(bean.getRight());
-//            System.out.print(bean.getData()+":");//此处所在顺序就是访问循序,后序
+//            System.out.print(bean.getData()+":");//此处所在顺序就是访问循序,前序 A:B:D:E:F:G:C:
+            str[0] += bean.getData()+":";
+            orderVisit(bean.getLeft(),str);
+            str[1] += bean.getData()+"-";
+//            System.out.print(bean.getData()+":");//此处所在顺序就是访问循序,中序 D-E-B-G-F-A-C-
+            orderVisit(bean.getRight(),str);
+            str[2] += bean.getData()+"#";
+//            System.out.print(bean.getData()+":");//此处所在顺序就是访问循序,后序 E:D:G:F:B:C:A:
         }
+
     }
-    private void orderVisitByStack(TreeBean bean){
+    /**
+     * 二叉树后续遍历
+     * @param bean
+     * @param resut [0]先序遍历 [1]中序遍历 [2]后序遍历
+     */
+    private void orderVisitByStackSuffix(TreeBean bean,String[] resut){
         Stack<TreeBean> stack = new Stack<TreeBean>();
         TreeBean visitBean = bean;
-
+        Set<TreeBean> set = new HashSet<TreeBean>();
+        Set<TreeBean> orderSet = new HashSet<>();
         if(visitBean == null){
             System.out.println("bean is null");
         }else{
             while(visitBean != null || stack.size()>0){
                 while(visitBean != null){
-//                    System.out.println(visitBean.getData());//中序遍历
-                    stack.push(visitBean);//左子树不为空则push
+                    resut[0]+=visitBean.getData()+":";
+                    stack.push(visitBean);
                     visitBean = visitBean.getLeft();
                 }
                 visitBean = stack.pop();
-//                System.out.print(visitBean.getData()+"-");//前序遍历
-                visitBean = visitBean.getRight();
+                if(orderSet.add(visitBean)) {
+                    resut[1] += visitBean.getData() + "-";
+                }
+                TreeBean visitRBean = visitBean.getRight();
+                if(visitRBean != null){
+                    if(set.add(visitRBean)) {
+                        stack.push(visitBean);
+                        visitBean = visitRBean;
+                    }else{
+                        resut[2] += visitBean.getData() + "#";
+                        visitBean = null;
+                    }
+                }else{
+                    resut[2] += visitBean.getData()+"#";
+                    visitBean = null;
+                }
             }
+        }
+    }
+
+    /**
+     * 队列遍历每一层的对象
+     * @param treeBean
+     */
+    public void orderInQue(TreeBean treeBean){
+        ConcurrentLinkedQueue treeQueue = new ConcurrentLinkedQueue();
+        Object objPlaceHolder = new Object();
+        if(treeBean != null){
+            treeQueue.offer(treeBean);
+//            treeQueue.offer(objPlaceHolder);
+        }
+        Object preObj = null;
+        while(!treeQueue.isEmpty()){
+            Object obj = treeQueue.poll();
+//            if(obj == objPlaceHolder){
+//                treeQueue.offer(objPlaceHolder);
+//            }else {
+                TreeBean tree = (TreeBean)obj;
+                System.out.print(tree.getData()+"=");
+                TreeBean tmp = null;
+                if ((tmp = tree.getLeft()) != null) {
+                    treeQueue.offer(tmp);
+                }
+                if((tmp = tree.getRight()) != null){
+                    treeQueue.offer(tmp);
+                }
+//            }
+//            if(preObj == obj && preObj == objPlaceHolder){
+//                break;
+//            }
+//            preObj = obj;
         }
     }
 }
