@@ -11,6 +11,7 @@
     <modules>
         <module>trystep</module>
         <module>hollybean</module>
+        <module>hollyweb</module>
     </modules>
 
     <properties>
@@ -20,7 +21,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <spring-framework.version>4.1.5.RELEASE</spring-framework.version>
-        <logback.version>1.0.13</logback.version>
+        <logback.version>1.2.3</logback.version>
         <slf4j.version>1.7.5</slf4j.version>
         <spring.boot.version>1.5.8.RELEASE</spring.boot.version>
         <orgjson.version>20160810</orgjson.version>
@@ -32,6 +33,8 @@
         <mysql.conn.version>5.1.40</mysql.conn.version>
         <spring.version>4.3.12.RELEASE</spring.version>
         <aspectj.version>1.8.11</aspectj.version>
+        <commonio.version>2.5</commonio.version>
+        <log4j.version>1.2.17</log4j.version>
     </properties>
 
     <dependencyManagement>
@@ -101,6 +104,44 @@
                 <artifactId>aspectjweaver</artifactId>
                 <version>${aspectj.version}</version>
             </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commonio.version}</version>
+            </dependency>
+            <!-- 日志相关 -->
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>jcl-over-slf4j</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logback.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-core</artifactId>
+                <version>${logback.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-access</artifactId>
+                <version>${logback.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -132,6 +173,7 @@
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
             <version>2.3.0</version>
+            <scope>provided</scope>
         </dependency>
 
 
