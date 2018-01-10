@@ -38,6 +38,7 @@
         <guava.version>23.5-jre</guava.version>
         <poi.version>3.17</poi.version>
         <hystrix.version>1.5.12</hystrix.version>
+        <netty.version>5.0.0.Alpha1</netty.version>
     </properties>
 
     <dependencyManagement>
@@ -160,7 +161,18 @@
                 <artifactId>hystrix-core</artifactId>
                 <version>${hystrix.version}</version>
             </dependency>
+            <!-- https://mvnrepository.com/artifact/io.netty/netty-all -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-all</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
 
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi</artifactId>
+                <version>3.12</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

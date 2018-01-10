@@ -5,6 +5,8 @@ import com.sun.xml.internal.stream.util.BufferAllocator;
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.annotations.SelectKey;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -24,6 +26,7 @@ import java.util.Set;
  */
 
 public class NioServer {
+    private static final Logger logger = LoggerFactory.getLogger("Nio");
     public static void main(String[] args) {
 //        new Thread(new MultiplexerTimeServer(8088)).start();
         new Thread(new TimeClientHandler("127.0.0.1",8088),"NIO-clientChannel").start();
@@ -41,7 +44,7 @@ public class NioServer {
                 selector = Selector.open();
                 serverChannel = ServerSocketChannel.open();
                 serverChannel.configureBlocking(false);
-                serverChannel.bind(new InetSocketAddress(port),1024);
+                serverChannel.socket().bind(new InetSocketAddress(port),1024); //此处是socket.bind否则客户端不能接收到消息
                 serverChannel.register(selector, SelectionKey.OP_ACCEPT);
                 System.out.println("server start at:"+port);
             }catch (IOException e){
@@ -93,6 +96,7 @@ public class NioServer {
                     SocketChannel socketChannel = channel.accept();
                     socketChannel.configureBlocking(false);
                     socketChannel.register(selector,SelectionKey.OP_READ);
+                    logger.info("server accept");
                 }
                 if(key.isReadable()){
                     SocketChannel socketChannel = (SocketChannel)key.channel();
@@ -105,6 +109,7 @@ public class NioServer {
                         String body = new String(bytes,"UTF-8");
                         System.out.println("body:"+body);
                         String currentTime = "QTO".equalsIgnoreCase(body)?new Date(System.currentTimeMillis()).toString():"BO";
+                        logger.info("response:"+currentTime);
                         doWrite(socketChannel,currentTime);
                     }else if(readBytes < 0){
                         key.channel();
@@ -112,6 +117,7 @@ public class NioServer {
                     }else{
 
                     }
+                    logger.info("server read");
                 }
             }
         }
@@ -120,7 +126,9 @@ public class NioServer {
                 byte[] bytes = resposne.getBytes();
                 ByteBuffer writeBuffer = ByteBuffer.allocate(bytes.length);
                 writeBuffer.put(bytes);
+                writeBuffer.flip();
                 channel.write(writeBuffer);
+                logger.info("server write");
             }
 
         }
@@ -132,7 +140,7 @@ public class NioServer {
     static class TimeClientHandler implements Runnable{
         private Selector selector;
         private SocketChannel socketChannel;
-        private boolean stop;
+        private volatile boolean stop = false;
         private volatile String host;
         private int port;
         public TimeClientHandler(String host,int port){
@@ -197,11 +205,14 @@ public class NioServer {
                 SocketChannel sc = (SocketChannel) key.channel();
                 if(key.isConnectable()){
                     if(sc.finishConnect()){
+                        logger.info("client connect3");
+                        sc.configureBlocking(false);
                         sc.register(selector,SelectionKey.OP_READ);
                         doWrite(sc);
                     }else{
                         System.exit(1);
                     }
+                    logger.info("client connect2");
                 }
                 if(key.isReadable()){
                     ByteBuffer readBuffer = ByteBuffer.allocate(1024);
@@ -219,6 +230,7 @@ public class NioServer {
                     }else{
 
                     }
+                    logger.info("client read");
                 }
             }
         }
@@ -229,7 +241,7 @@ public class NioServer {
             }else{
                 socketChannel.register(selector,SelectionKey.OP_CONNECT);
             }
-
+            logger.info("client connect");
         }
         private void doWrite(SocketChannel sc) throws IOException{
             byte[] req = "QTO".getBytes();
@@ -240,6 +252,7 @@ public class NioServer {
             if(!writeBuffer.hasRemaining()){
                 System.out.println("send order to Server success");
             }
+            logger.info("client write");
         }
     }
 }
