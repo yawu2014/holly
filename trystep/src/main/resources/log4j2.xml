@@ -3,7 +3,7 @@
 
 
     <property name="log.path" value="./logs"/>
-    <property name="log.filename" value="mmednet-robot-dataspider-anhui"/>
+    <property name="log.filename" value="trystep"/>
 
     <contextName>${log.filename}</contextName>
 
@@ -78,13 +78,5 @@
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="ROLLINGFILE_APPENDER_INFO" />
     </root>
-
-    <logger name="com.mmednet.robot.dataservice" additivity="false">
-        <level value="DEBUG" />
-        <appender-ref ref="ROLLINGFILE_APPENDER_ACCESS"/>
-        <appender-ref ref="ROLLINGFILE_APPENDER_ERROR"/>
-        <appender-ref ref="ROLLINGFILE_APPENDER_INFO" />
-    </logger>
-
 
 </configuration>
