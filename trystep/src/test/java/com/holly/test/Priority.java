@@ -8,8 +8,8 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @Author liuyujian
- * @Description:
- * @date ${date} ${time}
+ * @Description: 线程优先级使用
+ * @date
  */
 public class Priority {
     private static volatile boolean notStart = true;

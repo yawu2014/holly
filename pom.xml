@@ -155,6 +155,11 @@
                 <artifactId>poi</artifactId>
                 <version>${poi.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
             <!-- https://mvnrepository.com/artifact/com.netflix.hystrix/hystrix-core -->
             <dependency>
                 <groupId>com.netflix.hystrix</groupId>
