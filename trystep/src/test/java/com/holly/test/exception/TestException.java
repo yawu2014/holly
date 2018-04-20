@@ -53,7 +53,7 @@ public class TestException {
     public static void main(String[] args) {
         TestException testException = new TestException();
         try{
-            testException.testEx1();
+            testException.testEx();
         }catch (Exception e){
             e.printStackTrace();;
         }

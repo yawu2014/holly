@@ -1,0 +1,33 @@
+dataSources:
+  sharding_0: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://node:3306/sharding_0?useUnicode=true&characterEncoding=utf8
+    username: root
+    password: m122
+  sharding_1: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://node:3306/sharding_1?useUnicode=true&characterEncoding=utf8
+    username: root
+    password: m122
+
+tables:
+  t_student:
+    actualDataNodes: sharding_${0..1}.t_student_${0..1}
+    databaseStrategy:
+      inline:
+        shardingColumn: student_id
+        algorithmExpression: sharding_${student_id % 2}
+    tableStrategy:
+      inline:
+        shardingColumn: age
+        algorithmExpression: t_student_${age % 2}
+  t_user:
+    actualDataNodes: sharding_${0..1}.t_user_${0..3}
+    databaseStrategy:
+      inline:
+        shardingColumn: user_id
+        algorithmExpression: sharding_${user_id % 2}
+    tableStrategy:
+      inline:
+        shardingColumn: age
+        algorithmExpression: t_student_${age % 3}
