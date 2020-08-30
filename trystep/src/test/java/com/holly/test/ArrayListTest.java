@@ -1,5 +1,6 @@
 package com.holly.test;
 
+import org.assertj.core.util.Lists;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -30,5 +31,12 @@ public class ArrayListTest {
             });
         }
         return "is end";
+    }
+    @Test
+    public void testAddExtrmePos(){
+        List<String> list = Lists.newArrayList();
+        list.add("a");
+        list.add(list.size(),"b");
+
     }
 }
