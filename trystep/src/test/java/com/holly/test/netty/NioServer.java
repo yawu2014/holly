@@ -25,8 +25,8 @@ import java.util.Set;
 
 public class NioServer {
     public static void main(String[] args) {
-//        new Thread(new MultiplexerTimeServer(8088)).start();
-        new Thread(new TimeClientHandler("127.0.0.1",8088),"NIO-clientChannel").start();
+        new Thread(new MultiplexerTimeServer(8088),"NIO-ServerChannel").start();
+//        new Thread(new TimeClientHandler("127.0.0.1",8088),"NIO-clientChannel").start();
     }
     @Test
     public void startNioServerChannel(){
