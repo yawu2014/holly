@@ -1,3 +1,4 @@
-*/target/
-**.impl
+**/target/*
+**.iml
 *.idea/
+*.class
