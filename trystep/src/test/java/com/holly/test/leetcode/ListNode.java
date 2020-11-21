@@ -1,9 +1,14 @@
 package com.holly.test.leetcode;
 
 public class ListNode<T> {
-    T val;
+    public T val;
     ListNode next;
     ListNode(T x){val = x;}
+
+    public ListNode(T val, ListNode next){
+        this.val = val;
+        this.next = next;
+    }
 
     @Override
     public String toString() {
